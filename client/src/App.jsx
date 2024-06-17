@@ -1,7 +1,11 @@
+import Routes from "./navigators/routes";
+import AuthProvider from "./context/authContext";
 function App() {
   return (
     <>
-      <h1 className="text-3xl font-bold underline bg-red-300">Hello world!</h1>
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
     </>
   );
 }
