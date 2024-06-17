@@ -1,7 +1,6 @@
 import NavBar from "../components/NavBar";
-import { useNavigate } from "react-router-dom";
+
 const Dashboard = () => {
-  const navigate = useNavigate();
   const allProjectsImages = [
     {
       src: "https://res.cloudinary.com/deagxexgl/image/upload/v1717682350/xdsqxycmh67rz8jt0qmx.png",
@@ -100,28 +99,12 @@ const Dashboard = () => {
         <h1 className="text-3xl font-bold mb-6 text-center">All Projects</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {allProjectsImages.map((image, index) => (
-            <div
-              key={index}
-              className="relative w-full h-auto group"
-              onClick={() => {
-                navigate("/project");
-              }}
-            >
+            <div key={index} className="relative w-full h-auto group">
               <img
                 src={image.src}
                 alt={image.name}
                 className="w-full h-full object-cover rounded-lg shadow-md"
               />
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span className="text-white text-lg font-semibold">
-                  {image.name}
-                </span>
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 py-2 text-center rounded-b-lg">
-                <span className="text-white text-sm font-medium">
-                  {image.name}
-                </span>
-              </div>
             </div>
           ))}
         </div>

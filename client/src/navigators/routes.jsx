@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Login from "../pages/authentication/Login";
 import Signup from "../pages/authentication/Signup";
 import Dashboard from "../pages/Dashboard";
+import ProjectDetails from "../pages/ProjectDetails";
 import RedirectIfAuthenticated from "../components/RedirectIfAuthenticated ";
 import ProtectedRoute from "../components/ProctectedRoute";
 const routes = () => {
@@ -37,6 +38,14 @@ const routes = () => {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/project"
+          element={
+            <ProtectedRoute>
+              <ProjectDetails />
             </ProtectedRoute>
           }
         />
