@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { registerUser } from "../../services/api/apiCalls";
+import { message } from "antd";
+import { useNavigate } from "react-router-dom";
 const schema = yup.object().shape({
   businessName: yup.string().required("Business name is required"),
   email: yup
@@ -14,6 +17,8 @@ const schema = yup.object().shape({
 });
 
 const Signup = () => {
+  const navigate = useNavigate();
+  const [messageApi, contextHolder] = message.useMessage();
   const {
     register,
     handleSubmit,
@@ -22,11 +27,32 @@ const Signup = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const response = await registerUser({
+        businessName: data.businessName,
+        email: data.email,
+        password: data.password,
+      });
+      messageApi.open({
+        type: "success",
+        content: "Registered successfully",
+        duration: 3,
+      });
+      navigate("/login");
+      console.log(response);
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: error.response.data.error,
+        duration: 3,
+      });
+      console.error("Register error:", error.response.data);
+    }
   };
   return (
     <>
+      {contextHolder}
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img

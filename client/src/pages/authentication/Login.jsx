@@ -1,6 +1,10 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { login } from "../../services/api/apiCalls";
+import { message } from "antd";
+import { useNavigate } from "react-router-dom";
+import { AuthUser } from "../../context/authContext";
 const schema = yup.object().shape({
   email: yup
     .string()
@@ -13,6 +17,10 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
+  const { setUser } = AuthUser();
+  const navigate = useNavigate();
+  const [messageApi, contextHolder] = message.useMessage();
+
   const {
     register,
     handleSubmit,
@@ -21,11 +29,34 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const response = await login({
+        email: data.email,
+        password: data.password,
+      });
+      messageApi.open({
+        type: "success",
+        content: "logged successfully",
+        duration: 3,
+      });
+      console.log(response);
+      setUser({ loggedIn: true });
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("user", JSON.stringify(response.user));
+      navigate("/dashboard");
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: error.response.data.error,
+        duration: 3,
+      });
+      console.error("Login error:", error.response.data);
+    }
   };
   return (
     <>
+      {contextHolder}
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img

@@ -1,6 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import Login from "../pages/authentication/Login";
 import Signup from "../pages/authentication/Signup";
+import Dashboard from "../pages/Dashboard";
+import RedirectIfAuthenticated from "../components/RedirectIfAuthenticated ";
+import ProtectedRoute from "../components/ProctectedRoute";
 const routes = () => {
   return (
     <div>
@@ -13,8 +16,30 @@ const routes = () => {
             </h1>
           }
         />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route
+          path="/login"
+          element={
+            <RedirectIfAuthenticated>
+              <Login />
+            </RedirectIfAuthenticated>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <RedirectIfAuthenticated>
+              <Signup />
+            </RedirectIfAuthenticated>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   );
