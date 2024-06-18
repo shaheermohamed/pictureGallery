@@ -39,4 +39,41 @@ const fetchOneProject = async (req, res) => {
   }
 };
 
-module.exports = { addProject, fetchProjects, fetchOneProject };
+const addImagesToProject = async (req, res) => {
+  try {
+    const { id, allImages } = req.body;
+    // const images = [
+    //   "A:/My Projects/React-Learning/PictureGallery/server/apple-website.png",
+    //   "A:/My Projects/React-Learning/PictureGallery/server/chatApp.png",
+    // ];
+    let results = [];
+    for (const image of allImages) {
+      const result = await cloudinary.uploader.upload(image);
+      results.push({ url: result.url });
+    }
+    const updateResult = await Project.updateOne(
+      { _id: id },
+      { $push: { images: { $each: results } } }
+    );
+
+    if (updateResult.modifiedCount === 0) {
+      return res.status(404).json({
+        message: "Project not found or no images added",
+        updatedProject,
+      });
+    }
+
+    res
+      .status(201)
+      .json({ message: "Images added successfully", updateResult });
+  } catch (error) {
+    res.status(500).json({ error: "Images addition failed", error });
+  }
+};
+
+module.exports = {
+  addProject,
+  fetchProjects,
+  fetchOneProject,
+  addImagesToProject,
+};

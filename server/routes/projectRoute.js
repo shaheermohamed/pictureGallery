@@ -5,6 +5,7 @@ const {
   addProject,
   fetchProjects,
   fetchOneProject,
+  addImagesToProject,
 } = require("../controllers/projectController");
 
 //to add project
@@ -15,6 +16,9 @@ router.get("/fetch", verifyToken, fetchProjects);
 
 //to fetch one project
 router.get("/fetch/:id", verifyToken, fetchOneProject);
+
+//add images to existing project
+router.post("/addImages", verifyToken, addImagesToProject);
 
 //sample image upload
 // router.post("/upload", async (req, res) => {
