@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const authRoutes = require("./routes/auth");
 const protectedRoutes = require("./routes/protectedRoute");
+const projectRoutes = require("./routes/projectRoute");
 const connectDb = require("./config/db");
 
 dotenv.config();
@@ -16,6 +17,7 @@ app.use(express.json());
 
 app.use("/auth", authRoutes);
 app.use("/protected", protectedRoutes);
+app.use("/project", projectRoutes);
 app.get("/", (req, res) => {
   res.send("server is running on" + " " + Port);
 });

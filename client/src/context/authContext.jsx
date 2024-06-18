@@ -13,6 +13,7 @@ const AuthProvider = ({ children }) => {
       const response = await authorization({
         token: localStorage.getItem("token"),
       });
+
       console.log("fetch:", response);
       setUser(response);
     } catch (error) {
