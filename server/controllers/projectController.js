@@ -42,14 +42,10 @@ const fetchOneProject = async (req, res) => {
 const addImagesToProject = async (req, res) => {
   try {
     const { id, allImages } = req.body;
-    // const images = [
-    //   "A:/My Projects/React-Learning/PictureGallery/server/apple-website.png",
-    //   "A:/My Projects/React-Learning/PictureGallery/server/chatApp.png",
-    // ];
+    console.log("allImages:", allImages);
     let results = [];
     for (const image of allImages) {
-      const result = await cloudinary.uploader.upload(image);
-      results.push({ url: result.url });
+      results.push({ url: image.url });
     }
     const updateResult = await Project.updateOne(
       { _id: id },

@@ -7,10 +7,26 @@ import {
   SwapOutlined,
   ZoomInOutlined,
   ZoomOutOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
-import { Image, Space } from "antd";
+import { Image, Space, Button, message, Upload } from "antd";
+import { useRef, useState } from "react";
+import axios from "axios";
 
 const ProjectDetails = () => {
+  const [isUploading, setIsUploading] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [selectedImagesUrl, setSelectedImagesUrl] = useState([]);
+  const [isUploadingToCloudinary, setIsUploadingCloudinary] = useState(false);
+  const inputFile = useRef(null);
+  const handleReset = () => {
+    if (inputFile.current) {
+      inputFile.current.value = "";
+      inputFile.current.type = "text";
+      inputFile.current.type = "file";
+    }
+  };
+
   const onDownload = (src) => {
     fetch(src)
       .then((response) => response.blob())
@@ -116,15 +132,104 @@ const ProjectDetails = () => {
     },
   ];
 
+  console.log("selectedImages:", selectedImages);
+  console.log("selectedImagesUrl:", selectedImagesUrl);
+  const handlePic = (pic) => {
+    if (pic.type === "image/jpeg" || pic.type === "image/png") {
+      setIsUploadingCloudinary(true);
+      const data = new FormData();
+      data.append("file", pic);
+      data.append("upload_preset", "picture-gallery");
+      data.append("cloud_name", "shaheer");
+      fetch("https://api.cloudinary.com/v1_1/deagxexgl/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setSelectedImagesUrl((prevImages) => [...prevImages, data.url]);
+          setIsUploadingCloudinary(false);
+        })
+        .catch((err) => {
+          setIsUploadingCloudinary(false);
+          console.log(err);
+        });
+    }
+  };
+
+  // const handleImageChange = (e) => {
+  //   const files = Array.from(e.target.files);
+  //   for (let image of files) {
+  //     handlePic(image);
+  //   }
+  //   // setSelectedImages((prevImages) => [...prevImages, ...files]);
+  // };
+
+  const handleImageUpload = async () => {
+    const token = localStorage.getItem("token");
+    setIsUploading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/project/addImages",
+        // formData,
+        {
+          id: "667179451ae5e06e03db933f",
+          allImages: selectedImagesUrl,
+        },
+        {
+          headers: {
+            Authorization: token,
+            // "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      handleReset();
+      setSelectedImagesUrl([]);
+      message.success("Images uploaded successfully");
+
+      console.log("Images uploaded successfully:", response.data);
+    } catch (error) {
+      message.error("Error uploading images");
+      console.error("Error uploading images:", error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
     <>
       <NavBar />
       <div className="pt-20 container mx-auto p-4">
         <h1 className="text-3xl font-bold mb-6 text-center">All Projects</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <div className="mb-4 relative w-full h-auto ">
-            <div className="w-full h-full object-cover rounded-lg shadow-md flex justify-center items-center">
-              <input type="file" accept="image/*" onChange={() => {}} />
+          <div className="mb-4 relative w-full h-auto">
+            <div className="w-full h-full object-cover rounded-lg shadow-md flex justify-center items-center flex-wrap">
+              <Upload
+                accept="image/png, image/jpeg"
+                type="file"
+                multiple
+                beforeUpload={(file) => {
+                  handlePic(file);
+                  return false;
+                }}
+                showUploadList={false}
+              >
+                <Button icon={<UploadOutlined />}>
+                  Select Images {selectedImagesUrl?.length}
+                </Button>
+              </Upload>
+              {!isUploadingToCloudinary && selectedImagesUrl.length > 0 ? (
+                <Button
+                  type="primary"
+                  icon={<UploadOutlined />}
+                  onClick={handleImageUpload}
+                  loading={isUploading}
+                >
+                  Upload Images
+                </Button>
+              ) : null}
             </div>
           </div>
           {allProjectsImages.map((image, index) => (

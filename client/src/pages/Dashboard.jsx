@@ -1,6 +1,8 @@
+import { useState } from "react";
 import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
+  const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
   const allProjectsImages = [
     {
@@ -95,7 +97,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <NavBar />
+      <NavBar setOpenModal={setOpenModal} />
       <div className="pt-20 container mx-auto p-4">
         <h1 className="text-3xl font-bold mb-6 text-center">All Projects</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
