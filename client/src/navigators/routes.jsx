@@ -42,7 +42,7 @@ const routes = () => {
           }
         />
         <Route
-          path="/project"
+          path="/project/:id"
           element={
             <ProtectedRoute>
               <ProjectDetails />

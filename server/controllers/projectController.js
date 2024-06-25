@@ -23,7 +23,7 @@ const addProject = async (req, res) => {
 const fetchProjects = async (req, res) => {
   try {
     const projects = await Project.find();
-    res.status(200).json({ projects });
+    res.status(200).json(projects);
   } catch (error) {
     res.status(500).json({ error: "Fetching projects failed" });
   }
@@ -33,7 +33,7 @@ const fetchOneProject = async (req, res) => {
   try {
     const { id } = req.params;
     const project = await Project.findById(id);
-    res.status(200).json({ project });
+    res.status(200).json(project);
   } catch (error) {
     res.status(500).json({ error: "Fetching project" });
   }
@@ -45,7 +45,7 @@ const addImagesToProject = async (req, res) => {
     console.log("allImages:", allImages);
     let results = [];
     for (const image of allImages) {
-      results.push({ url: image.url });
+      results.push({ url: image });
     }
     const updateResult = await Project.updateOne(
       { _id: id },
