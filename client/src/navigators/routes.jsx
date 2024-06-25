@@ -5,18 +5,12 @@ import Dashboard from "../pages/Dashboard";
 import ProjectDetails from "../pages/ProjectDetails";
 import RedirectIfAuthenticated from "../components/RedirectIfAuthenticated ";
 import ProtectedRoute from "../components/ProctectedRoute";
+import View from "../pages/View";
 const routes = () => {
   return (
     <div>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <h1 className="text-3xl font-bold underline bg-red-300">
-              Hello world!
-            </h1>
-          }
-        />
+        <Route path="/:id" element={<View />} />
         <Route
           path="/login"
           element={

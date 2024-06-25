@@ -6,6 +6,7 @@ const {
   fetchProjects,
   fetchOneProject,
   addImagesToProject,
+  viewOneProject,
 } = require("../controllers/projectController");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
@@ -14,10 +15,10 @@ const upload = multer({ dest: "uploads/" });
 router.post("/add", verifyToken, addProject);
 
 //to fetch projects
-router.get("/fetch", verifyToken, fetchProjects);
+router.get("/fetch/:userId", verifyToken, fetchProjects);
 
 //to fetch one project
-router.get("/fetch/:id", verifyToken, fetchOneProject);
+router.get("/fetchOne/:id", verifyToken, fetchOneProject);
 
 //add images to existing project
 router.post(
@@ -26,5 +27,7 @@ router.post(
   // upload.array("images"),
   addImagesToProject
 );
+
+router.get("/view/:id", viewOneProject);
 
 module.exports = router;

@@ -14,8 +14,10 @@ import { useRef, useState } from "react";
 import { addImages } from "../services/api/apiCalls";
 import { useProject } from "../services/query/queryCalls";
 import { useParams } from "react-router-dom";
+import { AuthUser } from "../context/authContext";
 
 const ProjectDetails = () => {
+  const { profile } = AuthUser();
   const { id } = useParams();
   const [isUploading, setIsUploading] = useState(false);
   const [selectedImagesUrl, setSelectedImagesUrl] = useState([]);
@@ -76,6 +78,7 @@ const ProjectDetails = () => {
     setIsUploading(true);
     try {
       const result = await addImages({
+        userId: profile._id,
         token,
         id,
         selectedImagesUrl,

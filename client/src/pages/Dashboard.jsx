@@ -8,10 +8,13 @@ import * as yup from "yup";
 import { UploadOutlined } from "@ant-design/icons";
 import { addProject } from "../services/api/apiCalls";
 import { useProjects } from "../services/query/queryCalls";
+import { AuthUser } from "../context/authContext";
 const schema = yup.object().shape({
   name: yup.string().required("Project Name is required"),
 });
 const Dashboard = () => {
+  const { profile } = AuthUser();
+  console.log("profile:", profile);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedImagesUrl, setSelectedImagesUrl] = useState([]);
   const [isUploadingToCloudinary, setIsUploadingCloudinary] = useState(false);
@@ -26,7 +29,7 @@ const Dashboard = () => {
     resolver: yupResolver(schema),
   });
 
-  const { data, refetch, isLoading } = useProjects();
+  const { data, refetch, isLoading } = useProjects({ userId: profile?._id });
   console.log("projects data:", data);
 
   const handleCancel = () => {
@@ -69,7 +72,12 @@ const Dashboard = () => {
     setIsUploading(true);
 
     try {
-      const result = await addProject({ token, data, selectedImagesUrl });
+      const result = await addProject({
+        userId: profile?._id,
+        token,
+        data,
+        selectedImagesUrl,
+      });
       handleReset();
       setSelectedImagesUrl([]);
       refetch();
@@ -142,7 +150,9 @@ const Dashboard = () => {
         <h1 className="text-3xl font-bold mb-6 text-center">All Projects</h1>
         {isLoading ? (
           <div className="flex justify-center items-center mt-10">
-            <Spin size="large"><h4 className="mt-20">Loading</h4></Spin>
+            <Spin size="large">
+              <h4 className="mt-20">Loading</h4>
+            </Spin>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

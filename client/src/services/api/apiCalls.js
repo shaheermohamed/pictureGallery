@@ -54,11 +54,17 @@ export const authorization = async ({ token }) => {
   }
 };
 
-export const addProject = async ({ token, data, selectedImagesUrl }) => {
+export const addProject = async ({
+  userId,
+  token,
+  data,
+  selectedImagesUrl,
+}) => {
   try {
     const response = await axios.post(
       `${url}/project/add`,
       {
+        userId: userId,
         projectName: data.name,
         allImages: selectedImagesUrl,
       },
@@ -100,9 +106,9 @@ export const addImages = async ({ token, id, selectedImagesUrl }) => {
   }
 };
 
-export const getProjects = async ({ token }) => {
+export const getProjects = async ({ token, userId }) => {
   try {
-    const response = await axios.get(`${url}/project/fetch`, {
+    const response = await axios.get(`${url}/project/fetch/${userId}`, {
       headers: {
         Authorization: `${token}`,
       },
@@ -117,12 +123,26 @@ export const getProjects = async ({ token }) => {
 };
 
 export const getProject = async ({ token, id }) => {
+  console.log("called ir");
   try {
-    const response = await axios.get(`${url}/project/fetch/${id}`, {
+    const response = await axios.get(`${url}/project/fetchOne/${id}`, {
       headers: {
         Authorization: `${token}`,
       },
     });
+    console.log("response:", response);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Authorization error:",
+      error.response ? error.response.data : error
+    );
+  }
+};
+
+export const getViewProject = async ({ id }) => {
+  try {
+    const response = await axios.get(`${url}/project/view/${id}`);
     return response.data;
   } catch (error) {
     console.error(
