@@ -10,6 +10,7 @@ const routes = () => {
   return (
     <div>
       <Routes>
+        <Route path="/" element={<h4>hi page not found</h4>} />
         <Route path="/:id" element={<View />} />
         <Route
           path="/login"
