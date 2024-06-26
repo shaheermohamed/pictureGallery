@@ -4,7 +4,8 @@ import axios from "axios";
 // dotenv.config();
 
 // const url = import.meta.env.DEV_SERVER;
-const url = "http://localhost:5000";
+// const url = "http://localhost:5000";
+const url = "https://picturegallery-api.onrender.com";
 
 export const registerUser = async ({ businessName, email, password }) => {
   try {

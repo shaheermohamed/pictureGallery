@@ -95,7 +95,8 @@ const ProjectDetails = () => {
     }
   };
   const handleCopy = () => {
-    const text = `http://localhost:5173/${data?._id}`;
+    const url = "https://picturegallery-api.onrender.com";
+    const text = `${url}/${data?._id}`;
     navigator.clipboard
       .writeText(text)
       .then(() => {
