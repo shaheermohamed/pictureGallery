@@ -8,16 +8,15 @@ import {
   ZoomInOutlined,
   ZoomOutOutlined,
   UploadOutlined,
+  CopyOutlined,
 } from "@ant-design/icons";
 import { Image, Space, Button, message, Upload, Spin } from "antd";
 import { useRef, useState } from "react";
 import { addImages } from "../services/api/apiCalls";
 import { useProject } from "../services/query/queryCalls";
 import { useParams } from "react-router-dom";
-import { AuthUser } from "../context/authContext";
 
 const ProjectDetails = () => {
-  const { profile } = AuthUser();
   const { id } = useParams();
   const [isUploading, setIsUploading] = useState(false);
   const [selectedImagesUrl, setSelectedImagesUrl] = useState([]);
@@ -78,7 +77,6 @@ const ProjectDetails = () => {
     setIsUploading(true);
     try {
       const result = await addImages({
-        userId: profile._id,
         token,
         id,
         selectedImagesUrl,
@@ -96,12 +94,28 @@ const ProjectDetails = () => {
       setIsUploading(false);
     }
   };
+  const handleCopy = () => {
+    const text = `http://localhost:5173/${data?._id}`;
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        message.success(`Link copied successfully :${text}`);
+      })
+      .catch((err) => {
+        message.error("Error while copying");
+      });
+  };
 
   return (
     <>
       <NavBar />
       <div className="pt-20 container mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-6 text-center">All Projects</h1>
+        <div className="flex flex-row justify-center items-center gap-2 mb-6">
+          <h1 className="text-3xl font-bold text-center">
+            {data?.projectName}
+          </h1>
+          <Button icon={<CopyOutlined />} onClick={handleCopy}></Button>
+        </div>
 
         {isLoading ? (
           <div className="flex justify-center items-center mt-10">
@@ -112,7 +126,7 @@ const ProjectDetails = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <div className="mb-4 relative w-full h-auto">
-              <div className="w-full h-full object-cover rounded-lg shadow-md flex justify-center items-center flex-wrap gap-2">
+              <div className="w-full h-full object-cover rounded-lg shadow-md flex justify-center items-center flex-wrap gap-2 flex-col">
                 <Upload
                   accept="image/png, image/jpeg"
                   type="file"

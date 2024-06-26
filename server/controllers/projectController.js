@@ -44,14 +44,14 @@ const fetchOneProject = async (req, res) => {
 
 const addImagesToProject = async (req, res) => {
   try {
-    const { userId, id, allImages } = req.body;
+    const { id, allImages } = req.body;
     console.log("allImages:", allImages);
     let results = [];
     for (const image of allImages) {
       results.push({ url: image });
     }
     const updateResult = await Project.updateOne(
-      { _id: id, userId: userId },
+      { _id: id },
       { $push: { images: { $each: results } } }
     );
 

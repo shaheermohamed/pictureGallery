@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
 import { Modal, Upload, message, Button, Spin } from "antd";
@@ -31,6 +31,10 @@ const Dashboard = () => {
 
   const { data, refetch, isLoading } = useProjects({ userId: profile?._id });
   console.log("projects data:", data);
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   const handleCancel = () => {
     setOpenModal(false);

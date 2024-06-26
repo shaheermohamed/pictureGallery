@@ -33,7 +33,9 @@ const View = () => {
   return (
     <>
       <div className="pt-20 container mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-6 text-center">All Projects</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">
+          {data?.projectName}
+        </h1>
 
         {isLoading ? (
           <div className="flex justify-center items-center mt-10">
