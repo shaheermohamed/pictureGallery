@@ -95,7 +95,7 @@ const ProjectDetails = () => {
     }
   };
   const handleCopy = () => {
-    const url = "https://picturegallery.onrender.com";
+    const url = "https://picturegallery-client.onrender.com";
     const text = `${url}/${data?._id}`;
     navigator.clipboard
       .writeText(text)
