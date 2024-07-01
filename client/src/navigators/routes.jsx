@@ -4,7 +4,7 @@ const routes = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Navigate to="/:id" />} />
+        <Route path="/" element={<Navigate to="/default-id" />} />
         <Route path="/:id" element={<View />} />
       </Routes>
     </div>
