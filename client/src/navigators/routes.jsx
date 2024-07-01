@@ -4,8 +4,15 @@ const routes = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Navigate to="/default-id" />} />
-        <Route path="/:id" element={<View />} />
+        <Route path="/:id" element={<View />} />{" "}
+        <Route
+          path="/"
+          element={
+            <div className="flex justify-center items-center">
+              <hi>hello there</hi>
+            </div>
+          }
+        />
       </Routes>
     </div>
   );
